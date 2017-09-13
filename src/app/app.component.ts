@@ -1,31 +1,29 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Hero } from './hero-details/hero';
-
-const HEROES: Hero[] = [
-    {id: 10, name: 'Jon Snow'},
-    {id: 11, name: 'Arya Stark'},
-    {id: 12, name: 'White Walker'},
-    {id: 13, name: 'Ygritte'},
-    {id: 14, name: 'Wildling'},
-    {id: 15, name: 'Wonder Woman'},
-    {id: 16, name: 'Sur Humphrey'},
-    {id: 17, name: 'Asha Yara Greyjoy'},
-    {id: 18, name: 'Lyanna Mormont'},
-    {id: 19, name: 'Daenerys '},
-    {id: 20, name: 'Tyrion Lannister'}
-    ];
+import { HeroService } from './hero/hero.service';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  styleUrls: ['./app.component.css'],
+  providers: [HeroService]
 })
-export class AppComponent {
+export class AppComponent implements OnInit{
   title = 'Winter is coming.';
   selectedHero: Hero;
-  heroes = HEROES;
+  heroes : Hero[];
+
+  constructor(private heroService: HeroService){}
+  
+  ngOnInit(): void {
+    this.getHeroes();
+  }
 
   onSelect(hero: Hero): void {
     this.selectedHero = hero;
+  }
+
+  getHeroes() : void {
+    this.heroService.getHeroes().then(heroes => this.heroes = heroes);
   }
 }
